@@ -3,6 +3,7 @@ import React, { Component } from "react";
 import { Navbar, NavbarBrand } from "reactstrap";
 import "./App.css";
 import Menu from "./components/MenuComponent";
+
 // abajo se colocan las llaves  porque no es un export default
 import { DISHES } from "./shared/dishes";
 
