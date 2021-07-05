@@ -46,7 +46,12 @@ class DishDetail extends Component {
                   return (
                     <li key="{item.id}">
                       {" "}
-                      {item.comment} <br></br> <span>--</span> {item.author}
+                      {item.comment} <br></br> <span>--</span> {item.author}{" "}
+                      {new Intl.DateTimeFormat("en-US", {
+                        year: "numeric",
+                        month: "short",
+                        day: "2-digit",
+                      }).format(new Date(Date.parse(item.date)))}
                     </li>
                   );
                 })}
@@ -65,11 +70,11 @@ class DishDetail extends Component {
   // porque la card no ocupan el 100% del ancho?
   render() {
     return (
-      <div>
+      <div className="container">
         <Row>
-          {this.renderDish(this.props.clicked)}
+          {this.renderDish(this.props.dish)}
 
-          {this.renderComments(this.props.clicked)}
+          {this.renderComments(this.props.dish)}
         </Row>
         {/* <Row>
           <Col xs="12" md="5">
