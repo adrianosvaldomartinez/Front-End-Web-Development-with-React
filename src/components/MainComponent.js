@@ -59,6 +59,7 @@ import Footer from "./FooterComponent";
 import Home from "./HomeComponent";
 import { Switch, Route, Redirect } from "react-router-dom";
 import Contact from "./ContactComponent";
+import About from "./AboutComponent";
 import { COMMENTS } from "../shared/comments";
 import { PROMOTIONS } from "../shared/promotions";
 import { LEADERS } from "../shared/leaders";
@@ -75,6 +76,7 @@ class Main extends Component {
   }
 
   render() {
+    // envia al componente hompage los props
     const HomePage = () => {
       return (
         <Home
@@ -84,18 +86,40 @@ class Main extends Component {
         />
       );
     };
+    const DishWithId = ({ match }) => {
+      return (
+        <DishDetail
+          dish={
+            this.state.dishes.filter(
+              (dish) => dish.id === parseInt(match.params.dishId, 10)
+            )[0]
+          }
+          comments={this.state.comments.filter(
+            (comment) => comment.dishId === parseInt(match.params.dishId, 10)
+          )}
+        />
+      );
+    };
     return (
       <div>
         <Header />
         {/* el Switch abajo compara la url solicitada al browser con sus opciones de switch y te devuelve el componete asociado */}
         <Switch>
           <Route exact path="/contactus" component={Contact} />
+          <Route
+            exact
+            path="/aboutus"
+            component={() => <About leaders={this.state.leaders} />}
+          />
           <Route path="/home" component={HomePage} />
+          {/* esta llamada a la ruta menu es con una funcion porque se le pasan props */}
           <Route
             exact
             path="/menu"
             component={() => <Menu dishes={this.state.dishes} />}
           />
+          {/* en esta otro caso tambien se le estan pasando props, pero se definieron en la cosntante, no aqui */}
+          <Route path="/menu/:dishId" component={DishWithId} />
           <Redirect to="/home" />
         </Switch>
         <Footer />
