@@ -144,4 +144,7 @@ class Main extends Component {
 }
 
 // export default Main;
+// connect es un funcion de react-redux
+// ----------------------------------------------------------------------------------------------------------------------------------
+// al pasar la clase, la estamos ligado con el initial state, pero como?
 export default withRouter(connect(mapStateToProps)(Main));
