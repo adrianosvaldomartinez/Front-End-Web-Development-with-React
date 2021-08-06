@@ -23,9 +23,21 @@ import {
 import { Control, LocalForm, Errors } from "react-redux-form";
 
 import { Link } from "react-router-dom";
-const required = (val) => val && val.length;
+// const required = (val) => val && val.length;
+function required(val) {
+  console.log("ESTO ES VAL", val);
+  return val && val.length;
+}
 const maxLength = (len) => (val) => !val || val.length <= len;
-const minLength = (len) => (val) => val && val.length >= len;
+// const minLength = (len) => (val) => val && val.length >= len;
+function minLength(len) {
+  // len es el dato que nosotros le pasamos como minimo
+  console.log("esto es len", len);
+  return function (val) {
+    return val && val.length >= len;
+  };
+}
+
 const isNumber = (val) => !isNaN(Number(val));
 const validEmail = (val) =>
   /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(val);
@@ -393,8 +405,9 @@ class Contact extends Component {
                         placeholder="Tel. Number"
                         className="form-control"
                         validators={{
+                          // son funciones que devuelven un true or false
                           required,
-                          minLength: minLength(3),
+                          minLength: minLength(4),
                           maxLength: maxLength(15),
                           isNumber,
                         }}
