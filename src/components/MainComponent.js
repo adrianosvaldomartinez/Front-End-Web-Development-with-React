@@ -64,10 +64,17 @@ import Home from "./HomeComponent";
 
 import Contact from "./ContactComponent";
 import About from "./AboutComponent";
+
+import { addComment } from "../redux/ActionCreators";
 // import { DISHES } from "../shared/dishes";
 // import { COMMENTS } from "../shared/comments";
 // import { PROMOTIONS } from "../shared/promotions";
 // import { LEADERS } from "../shared/leaders";
+
+const mapDispatchToProps = (dispatch) => ({
+  addComment: (dishId, rating, author, comment) =>
+    dispatch(addComment(dishId, rating, author, comment)),
+});
 
 const mapStateToProps = (state) => {
   return {
@@ -103,6 +110,16 @@ class Main extends Component {
     };
     const DishWithId = ({ match }) => {
       return (
+        // <DishDetail
+        //   dish={
+        //     this.props.dishes.filter(
+        //       (dish) => dish.id === parseInt(match.params.dishId, 10)
+        //     )[0]
+        //   }
+        //   comments={this.props.comments.filter(
+        //     (comment) => comment.dishId === parseInt(match.params.dishId, 10)
+        //   )}
+        // />
         <DishDetail
           dish={
             this.props.dishes.filter(
@@ -112,6 +129,7 @@ class Main extends Component {
           comments={this.props.comments.filter(
             (comment) => comment.dishId === parseInt(match.params.dishId, 10)
           )}
+          addComment={this.props.addComment}
         />
       );
     };
@@ -147,4 +165,5 @@ class Main extends Component {
 // connect es un funcion de react-redux
 // ----------------------------------------------------------------------------------------------------------------------------------
 // connect(mapStateToProps) va a dar como resultado una funcion al que se le pasa el parametro Main
-export default withRouter(connect(mapStateToProps)(Main));
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Main));

@@ -132,7 +132,7 @@ function minLength(len) {
     return val && val.length >= len;
   };
 }
-
+// -------------------------------------------------------------------------------------------------------------------------------------------------------------
 function RenderDish({ dish }) {
   if (dish != null)
     return (
@@ -148,8 +148,8 @@ function RenderDish({ dish }) {
     );
   else return <div></div>;
 }
-
-function RenderComments({ comments }) {
+// -------------------------------------------------------------------------------------------------------------------------------------------------------------
+function RenderComments({ comments, addComment, dishId }) {
   if (comments != null)
     return (
       // <Col xs="12" md="5" className="m-1">
@@ -158,9 +158,12 @@ function RenderComments({ comments }) {
           <h4>Comments</h4>
           <List type="unstyled">
             {comments.map(function (item) {
+              console.log("ESTOS SON LOS ITEMS", item);
               return (
                 <li key="{item.id}">
                   {" "}
+                  {item.rating}
+                  <span>--</span>
                   {item.comment} <br></br> <span>--</span> {item.author}{" "}
                   {new Intl.DateTimeFormat("en-US", {
                     year: "numeric",
@@ -171,13 +174,14 @@ function RenderComments({ comments }) {
               );
             })}
           </List>
+          <CommentForm dishId={dishId} addComment={addComment} />
         </CardBody>
       </Card>
       // </Col>
     );
   else return <div></div>;
 }
-
+// -------------------------------------------------------------------------------------------------------------------------------------------------------------
 class CommentForm extends Component {
   constructor(props) {
     super(props);
@@ -189,12 +193,23 @@ class CommentForm extends Component {
       modal: false,
     };
     this.toggle = this.toggle.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
   // estos son hooks que se usarian en function components
   // toggle = () => setModal(!modal);
   // al no usar hooks hago de la siguiente manera
   toggle() {
     this.setState({ modal: !this.state.modal });
+  }
+  handleSubmit(values) {
+    this.toggle();
+    console.log("aqui estan", values);
+    this.props.addComment(
+      this.props.dishId,
+      values.Rating,
+      values.Yourname,
+      values.Comment
+    );
   }
 
   render() {
@@ -273,13 +288,13 @@ class CommentForm extends Component {
                     className="form-control"
                   />
                 </Col>
+                <Button color="primary" type="submit">
+                  Do Something
+                </Button>{" "}
               </Row>
             </LocalForm>
           </ModalBody>
           <ModalFooter>
-            <Button color="primary" onClick={this.toggle}>
-              Do Something
-            </Button>{" "}
             <Button color="secondary" onClick={this.toggle}>
               Cancel
             </Button>
@@ -289,7 +304,7 @@ class CommentForm extends Component {
     );
   }
 }
-
+// -------------------------------------------------------------------------------------------------------------------------------------------------------------
 const DishDetail = (props) => {
   console.log("ESTOS SON LOS PROPS", props);
 
@@ -325,8 +340,12 @@ const DishDetail = (props) => {
           <RenderDish dish={props.dish} />
         </div>
         <div className="col-12 col-md-5 m-1">
-          <RenderComments comments={props.comments} />
-          <CommentForm />
+          {/* <RenderComments comments={props.comments} /> */}
+          <RenderComments
+            comments={props.comments}
+            addComment={props.addComment}
+            dishId={props.dish.id}
+          />
         </div>
       </div>
     </div>
