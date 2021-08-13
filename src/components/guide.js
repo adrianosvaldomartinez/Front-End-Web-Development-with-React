@@ -3,7 +3,8 @@
 // CC es un extende del react componenete, se usa la funcion constructira y despues se invoca a la funcion render y el return de eso es el JSX,
 // puede invocar funciones auxiliares antes de llamar al metodo render
 
-CC0; // main component aqui es donde se importaron todos los demas componentes
+CC0; // main component
+// aqui es donde se importaron todos los demas componentes, no muestra directamente nada pero organiza las rutas y todos los demas componentes
 // main  its a class component, se le pasan los super props y demas estados dentro del contructor
 // se llama a la funcion render y el return de esta funcion es el jsx que se renderiza
 // antes de llamar al return podemos almecenar funciones intenrnas que usar dentro de esta nueva clase extendida
@@ -21,7 +22,6 @@ FC4; //  contact es un functional component
 // basicmanete se le uso como ejemplo para usar los awsome fonts
 
 FC5; // Menu component
-//en este caso se almacena la funcion retornada dentro de una constante (no entiendo para que)
 
 6; // Dish detail component
 // dentro de main componente tiene dos dos rutas
