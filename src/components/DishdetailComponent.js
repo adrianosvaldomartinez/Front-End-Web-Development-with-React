@@ -119,6 +119,7 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import { Link } from "react-router-dom";
 import { Control, LocalForm, Errors } from "react-redux-form";
 import { Loading } from "./LoadingComponent";
+import { baseUrl } from "../shared/baseUrl";
 
 function required(val) {
   console.log("ESTO ES VAL", val);
@@ -139,7 +140,7 @@ function RenderDish({ dish }) {
     return (
       // <Col xs="12" md="5" m="1" className="m-1">
       <Card>
-        <CardImg width="100%" src={dish.image} alt={dish.name} />
+        <CardImg top src={baseUrl + dish.image} alt={dish.name} />
         <CardBody>
           <CardTitle>{dish.name}</CardTitle>
           <CardText>{dish.description}</CardText>
