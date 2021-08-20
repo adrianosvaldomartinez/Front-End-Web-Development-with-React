@@ -73,6 +73,8 @@ import {
   fetchPromos,
 } from "../redux/ActionCreators";
 
+import { TransitionGroup, CSSTransition } from "react-transition-group";
+
 // import { DISHES } from "../shared/dishes";
 // import { COMMENTS } from "../shared/comments";
 // import { PROMOTIONS } from "../shared/promotions";
@@ -218,31 +220,39 @@ class Main extends Component {
       <div>
         <Header />
         {/* el Switch abajo compara la url solicitada al browser con sus opciones de switch y te devuelve el componete asociado */}
-        <Switch>
-          {/* <Route exact path="/contactus" component={Contact} /> */}
-          <Route
-            exact
-            path="/contactus"
-            component={() => (
-              <Contact resetFeedbackForm={this.props.resetFeedbackForm} />
-            )}
-          />
-          <Route
-            exact
-            path="/aboutus"
-            component={() => <About leaders={this.props.leaders} />}
-          />
-          <Route path="/home" component={HomePage} />
-          {/* esta llamada a la ruta menu es con una funcion porque se le pasan props */}
-          <Route
-            exact
-            path="/menu"
-            component={() => <Menu dishes={this.props.dishes} />}
-          />
-          {/* en esta otro caso tambien se le estan pasando props, pero se definieron en la cosntante, no aqui */}
-          <Route path="/menu/:dishId" component={DishWithId} />
-          <Redirect to="/home" />
-        </Switch>
+        <TransitionGroup>
+          <CSSTransition
+            key={this.props.location.key}
+            classNames="page"
+            timeout={300}
+          >
+            <Switch>
+              {/* <Route exact path="/contactus" component={Contact} /> */}
+              <Route
+                exact
+                path="/contactus"
+                component={() => (
+                  <Contact resetFeedbackForm={this.props.resetFeedbackForm} />
+                )}
+              />
+              <Route
+                exact
+                path="/aboutus"
+                component={() => <About leaders={this.props.leaders} />}
+              />
+              <Route path="/home" component={HomePage} />
+              {/* esta llamada a la ruta menu es con una funcion porque se le pasan props */}
+              <Route
+                exact
+                path="/menu"
+                component={() => <Menu dishes={this.props.dishes} />}
+              />
+              {/* en esta otro caso tambien se le estan pasando props, pero se definieron en la cosntante, no aqui */}
+              <Route path="/menu/:dishId" component={DishWithId} />
+              <Redirect to="/home" />
+            </Switch>
+          </CSSTransition>
+        </TransitionGroup>
         <Footer />
       </div>
     );
