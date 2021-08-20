@@ -5,15 +5,51 @@ import { baseUrl } from "../shared/baseUrl";
 // las acciones son funciones que retornan un objeto, en base a los variables pasadas a la funcion
 // estas se llaman con dispatch
 
-export const addComment = (dishId, rating, author, comment) => ({
+export const addComment = (comment) => ({
   type: ActionTypes.ADD_COMMENT,
-  payload: {
+  payload: comment,
+});
+
+export const postComment = (dishId, rating, author, comment) => (dispatch) => {
+  const newComment = {
     dishId: dishId,
     rating: rating,
     author: author,
     comment: comment,
-  },
-});
+  };
+  newComment.date = new Date().toISOString();
+
+  return fetch(baseUrl + "comments", {
+    method: "POST",
+    body: JSON.stringify(newComment),
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "same-origin",
+  })
+    .then(
+      (response) => {
+        if (response.ok) {
+          return response;
+        } else {
+          var error = new Error(
+            "Error " + response.status + ": " + response.statusText
+          );
+          error.response = response;
+          throw error;
+        }
+      },
+      (error) => {
+        throw error;
+      }
+    )
+    .then((response) => response.json())
+    .then((response) => dispatch(addComment(response)))
+    .catch((error) => {
+      console.log("post comments", error.message);
+      alert("Your comment could not be posted\nError: " + error.message);
+    });
+};
 
 // este es el THUNK
 // Redux Thunk middleware allows you to write action creators that return a function instead of an action
@@ -21,10 +57,28 @@ export const addComment = (dishId, rating, author, comment) => ({
 // y aparte retornamo el objecto despues de fetchearlo
 export const fetchDishes = () => (dispatch) => {
   dispatch(dishesLoading(true));
-
   return fetch(baseUrl + "dishes")
+    .then(
+      (response) => {
+        if (response.ok) {
+          return response;
+        } else {
+          var error = new Error(
+            "Error " + response.status + ": " + response.statusText
+          );
+          error.response = response;
+          throw error;
+        }
+      },
+      // el segundo argumento del metodo then, es llamado si hay un reject de la promesa
+      (error) => {
+        var errmess = new Error(error.message);
+        throw errmess;
+      }
+    )
     .then((response) => response.json())
-    .then((dishes) => dispatch(addDishes(dishes)));
+    .then((dishes) => dispatch(addDishes(dishes)))
+    .catch((error) => dispatch(dishesFailed(error.message)));
 };
 
 // Es usado en fetch dishes
@@ -44,8 +98,26 @@ export const addDishes = (dishes) => ({
 
 export const fetchComments = () => (dispatch) => {
   return fetch(baseUrl + "comments")
+    .then(
+      (response) => {
+        if (response.ok) {
+          return response;
+        } else {
+          var error = new Error(
+            "Error " + response.status + ": " + response.statusText
+          );
+          error.response = response;
+          throw error;
+        }
+      },
+      (error) => {
+        var errmess = new Error(error.message);
+        throw errmess;
+      }
+    )
     .then((response) => response.json())
-    .then((comments) => dispatch(addComments(comments)));
+    .then((comments) => dispatch(addComments(comments)))
+    .catch((error) => dispatch(commentsFailed(error.message)));
 };
 
 export const commentsFailed = (errmess) => ({
@@ -62,12 +134,26 @@ export const fetchPromos = () => (dispatch) => {
   dispatch(promosLoading());
 
   return fetch(baseUrl + "promotions")
+    .then(
+      (response) => {
+        if (response.ok) {
+          return response;
+        } else {
+          var error = new Error(
+            "Error " + response.status + ": " + response.statusText
+          );
+          error.response = response;
+          throw error;
+        }
+      },
+      (error) => {
+        var errmess = new Error(error.message);
+        throw errmess;
+      }
+    )
     .then((response) => response.json())
-    .then((promos) => {
-      console.log(promos, "FUUUUUUUUUUUUUUUUUUUUUUUCK");
-      return promos;
-    })
-    .then((promos) => dispatch(addPromos(promos)));
+    .then((promos) => dispatch(addPromos(promos)))
+    .catch((error) => dispatch(promosFailed(error.message)));
 };
 
 export const promosLoading = () => ({

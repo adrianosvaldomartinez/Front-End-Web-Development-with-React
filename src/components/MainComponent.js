@@ -67,7 +67,7 @@ import About from "./AboutComponent";
 
 import { actions } from "react-redux-form";
 import {
-  addComment,
+  postComment,
   fetchDishes,
   fetchComments,
   fetchPromos,
@@ -81,8 +81,11 @@ import {
 // aqui hacemos disponible las accion dispatch dentro de nuestro componente
 // cada accion es un propieda cuyo valor es una funcion que retorna la accion despachada
 const mapDispatchToProps = (dispatch) => ({
-  addComment: (dishId, rating, author, comment) =>
-    dispatch(addComment(dishId, rating, author, comment)),
+  // addComment: (dishId, rating, author, comment) =>
+  //   dispatch(addComment(dishId, rating, author, comment)),
+  postComment: (dishId, rating, author, comment) =>
+    dispatch(postComment(dishId, rating, author, comment)),
+
   fetchDishes: () => {
     dispatch(fetchDishes());
   },
@@ -141,7 +144,7 @@ class Main extends Component {
           dishesLoading={this.props.dishes.isLoading}
           dishErrMess={this.props.dishes.errMess}
           // adrian es
-          adrian={this.props.promotions.promotions}
+          // adrian={this.props.promotions.promotions}
           promotion={
             // el primer promotion es un objeto que tiene un propieda lalmada promotions que es un array
             this.props.promotions.promotions.filter(
@@ -207,7 +210,7 @@ class Main extends Component {
             (comment) => comment.dishId === parseInt(match.params.dishId, 10)
           )}
           commentsErrMess={this.props.comments.errMess}
-          addComment={this.props.addComment}
+          postComment={this.props.postComment}
         />
       );
     };

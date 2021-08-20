@@ -42,10 +42,12 @@ function Home(props) {
     <div className="container">
       <div className="row align-items-start">
         <div className="col-12 col-md m-1">
+          {/* ACA ESTA EL PROBLEMA */}
           <RenderCard
             item={props.dish}
             isLoading={props.dishesLoading}
-            errMess={props.dishesErrMess}
+            // AQUI ESTAVA EL ERRRor decia dishesErrMess
+            errMess={props.dishErrMess}
           />
         </div>
         <div className="col-12 col-md m-1">

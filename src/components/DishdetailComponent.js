@@ -151,7 +151,7 @@ function RenderDish({ dish }) {
   else return <div></div>;
 }
 // -------------------------------------------------------------------------------------------------------------------------------------------------------------
-function RenderComments({ comments, addComment, dishId }) {
+function RenderComments({ comments, postComment, dishId }) {
   if (comments != null)
     return (
       // <Col xs="12" md="5" className="m-1">
@@ -176,7 +176,7 @@ function RenderComments({ comments, addComment, dishId }) {
               );
             })}
           </List>
-          <CommentForm dishId={dishId} addComment={addComment} />
+          <CommentForm dishId={dishId} postComment={postComment} />
         </CardBody>
       </Card>
       // </Col>
@@ -206,7 +206,7 @@ class CommentForm extends Component {
   handleSubmit(values) {
     this.toggle();
     console.log("aqui estan", values);
-    this.props.addComment(
+    this.props.postComment(
       this.props.dishId,
       values.Rating,
       values.Yourname,
@@ -361,7 +361,7 @@ const DishDetail = (props) => {
             {/* <RenderComments comments={props.comments} /> */}
             <RenderComments
               comments={props.comments}
-              addComment={props.addComment}
+              postComment={props.postComment}
               dishId={props.dish.id}
             />
           </div>
