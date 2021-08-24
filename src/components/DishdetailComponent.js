@@ -120,6 +120,7 @@ import { Link } from "react-router-dom";
 import { Control, LocalForm, Errors } from "react-redux-form";
 import { Loading } from "./LoadingComponent";
 import { baseUrl } from "../shared/baseUrl";
+import { FadeTransform, Fade, Stagger } from "react-animation-components";
 
 function required(val) {
   console.log("ESTO ES VAL", val);
@@ -139,13 +140,20 @@ function RenderDish({ dish }) {
   if (dish != null)
     return (
       // <Col xs="12" md="5" m="1" className="m-1">
-      <Card>
-        <CardImg top src={baseUrl + dish.image} alt={dish.name} />
-        <CardBody>
-          <CardTitle>{dish.name}</CardTitle>
-          <CardText>{dish.description}</CardText>
-        </CardBody>
-      </Card>
+      <FadeTransform
+        in
+        transformProps={{
+          exitTransform: "scale(0.5) translateY(-50%)",
+        }}
+      >
+        <Card>
+          <CardImg top src={baseUrl + dish.image} alt={dish.name} />
+          <CardBody>
+            <CardTitle>{dish.name}</CardTitle>
+            <CardText>{dish.description}</CardText>
+          </CardBody>
+        </Card>
+      </FadeTransform>
       // </Col>
     );
   else return <div></div>;
@@ -159,22 +167,27 @@ function RenderComments({ comments, postComment, dishId }) {
         <CardBody>
           <h4>Comments</h4>
           <List type="unstyled">
-            {comments.map(function (item) {
-              console.log("ESTOS SON LOS ITEMS", item);
-              return (
-                <li key="{item.id}">
-                  {" "}
-                  {item.rating}
-                  <span>--</span>
-                  {item.comment} <br></br> <span>--</span> {item.author}{" "}
-                  {new Intl.DateTimeFormat("en-US", {
-                    year: "numeric",
-                    month: "short",
-                    day: "2-digit",
-                  }).format(new Date(Date.parse(item.date)))}
-                </li>
-              );
-            })}
+            <Stagger in>
+              {comments.map(function (item) {
+                console.log("ESTOS SON LOS ITEMS", item);
+
+                return (
+                  <Fade in>
+                    <li key="{item.id}">
+                      {" "}
+                      {item.rating}
+                      <span>--</span>
+                      {item.comment} <br></br> <span>--</span> {item.author}{" "}
+                      {new Intl.DateTimeFormat("en-US", {
+                        year: "numeric",
+                        month: "short",
+                        day: "2-digit",
+                      }).format(new Date(Date.parse(item.date)))}
+                    </li>
+                  </Fade>
+                );
+              })}
+            </Stagger>
           </List>
           <CommentForm dishId={dishId} postComment={postComment} />
         </CardBody>

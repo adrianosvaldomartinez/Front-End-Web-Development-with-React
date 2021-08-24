@@ -71,6 +71,9 @@ import {
   fetchDishes,
   fetchComments,
   fetchPromos,
+  fetchLeader,
+  fetchFeedbacks,
+  postFeedback,
 } from "../redux/ActionCreators";
 
 import { TransitionGroup, CSSTransition } from "react-transition-group";
@@ -85,6 +88,17 @@ import { TransitionGroup, CSSTransition } from "react-transition-group";
 const mapDispatchToProps = (dispatch) => ({
   // addComment: (dishId, rating, author, comment) =>
   //   dispatch(addComment(dishId, rating, author, comment)),
+
+  postFeedback: (dishId, rating, author, comment) =>
+    dispatch(postFeedback(dishId, rating, author, comment)),
+
+  fetchFeedbacks: () => dispatch(fetchFeedbacks()),
+
+  // OJO VER SGTE LINEA ES NECESARIO TAMBIEN HACER PARA FEEDBACK
+  // resetFeedbackForm: () => {
+  //   dispatch(actions.reset("feedback"));
+  // },
+
   postComment: (dishId, rating, author, comment) =>
     dispatch(postComment(dishId, rating, author, comment)),
 
@@ -96,6 +110,7 @@ const mapDispatchToProps = (dispatch) => ({
   },
   fetchComments: () => dispatch(fetchComments()),
   fetchPromos: () => dispatch(fetchPromos()),
+  fetchLeader: () => dispatch(fetchLeader()),
 });
 
 const mapStateToProps = (state) => {
@@ -104,6 +119,7 @@ const mapStateToProps = (state) => {
     comments: state.comments,
     promotions: state.promotions,
     leaders: state.leaders,
+    feedback: state.feedback,
   };
 };
 
@@ -119,14 +135,21 @@ class Main extends Component {
     // };
   }
   componentDidMount() {
+    // estas funciones actulizan el storage con la info que hay en el servidor
     this.props.fetchPromos();
     this.props.fetchDishes();
     this.props.fetchComments();
+    this.props.fetchLeader();
+    this.props.fetchFeedbacks();
   }
 
   render() {
+    {
+    }
     // envia al componente hompage los props
     const HomePage = () => {
+      // this.props.leaders.leaders.filter((leaders) => leaders.featured)[0]
+
       return (
         // <Home
         //   dish={this.props.dishes.filter((dish) => dish.featured)[0]}
@@ -155,7 +178,15 @@ class Main extends Component {
           }
           promoLoading={this.props.promotions.isLoading}
           promoErrMess={this.props.promotions.errMess}
-          leader={this.props.leaders.filter((leader) => leader.featured)[0]}
+          leader={
+            // this.props.leaders.leaders.filter(
+            //   (leaders) => leaders.featured === true
+            // )[0]
+            this.props.leaders.leaders.filter((leader) => leader.featured)[0]
+          }
+          leaderLoading={this.props.leaders.isLoading}
+          leaderErrMess={this.props.leaders.errMess}
+          // leader={this.props.leaders.leaders}
         />
       );
     };
@@ -238,7 +269,7 @@ class Main extends Component {
               <Route
                 exact
                 path="/aboutus"
-                component={() => <About leaders={this.props.leaders} />}
+                component={() => <About leaders={this.props.leaders.leaders} />}
               />
               <Route path="/home" component={HomePage} />
               {/* esta llamada a la ruta menu es con una funcion porque se le pasan props */}

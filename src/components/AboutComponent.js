@@ -14,6 +14,7 @@ import { Link } from "react-router-dom";
 function RenderLeader(props) {
   return props.lideres.map((lider) => (
     <Media>
+      {/* este primero funciona */}
       {/* <img src="/assets/images/alberto.png"></img>
       <img src={lider.image}></img>
 
